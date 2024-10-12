@@ -3,8 +3,8 @@ import {
 	generateBlogPostAction,
 	transcribeUploadedFile,
 } from "@/actions/upload-actions";
-import { useToast } from "@/hooks/use-toast";
 import { useUploadThing } from "@/utils/uploadthing";
+import { toast } from "sonner";
 import { z } from "zod";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
@@ -25,17 +25,15 @@ const schema = z.object({
 });
 
 export default function UploadForm({ planTypeName }: { planTypeName: string }) {
-	const { toast } = useToast();
-
 	const { startUpload } = useUploadThing("videoOrAudioUploader", {
 		onClientUploadComplete: () => {
-			toast({ title: "uploaded successfully!" });
+			toast("uploaded successfully!");
 		},
 		onUploadError: (err) => {
 			console.error("Error occurred", err);
 		},
 		onUploadBegin: () => {
-			toast({ title: "Upload has begun 🚀!" });
+			toast("Upload has begun 🚀!");
 		},
 	});
 
@@ -49,9 +47,7 @@ export default function UploadForm({ planTypeName }: { planTypeName: string }) {
 				"validatedFields",
 				validatedFields.error.flatten().fieldErrors,
 			);
-			toast({
-				title: "❌ Something went wrong",
-				variant: "destructive",
+			toast.error("Something went wrong", {
 				description:
 					validatedFields.error.flatten().fieldErrors.file?.[0] ??
 					"Invalid file",
@@ -63,14 +59,11 @@ export default function UploadForm({ planTypeName }: { planTypeName: string }) {
 			console.log({ resp });
 
 			if (!resp) {
-				toast({
-					title: "Something went wrong",
+				toast.error("Something went wrong", {
 					description: "Please use a different file",
-					variant: "destructive",
 				});
 			}
-			toast({
-				title: "🎙️ Transcription is in progress...",
+			toast.info("Transcription is in progress...", {
 				description:
 					"Hang tight! Our digital wizards are sprinkling magic dust on your file! ✨",
 			});
@@ -79,16 +72,14 @@ export default function UploadForm({ planTypeName }: { planTypeName: string }) {
 			const { data = null, message = null } = result || {};
 
 			if (!result || (!data && !message)) {
-				toast({
-					title: "An unexpected error occurred",
+				toast.error("An unexpected error occurred", {
 					description:
 						"An error occurred during transcription. Please try again.",
 				});
 			}
 
 			if (data) {
-				toast({
-					title: "🤖 Generating AI blog post...",
+				toast.message("Generating AI blog post...", {
 					description: "Please wait while we generate your blog post.",
 				});
 
@@ -97,8 +88,7 @@ export default function UploadForm({ planTypeName }: { planTypeName: string }) {
 					userId: data.userId,
 				});
 
-				toast({
-					title: "🎉 Woohoo! Your AI blog is created! 🎊",
+				toast.message("🎉 Woohoo! Your AI blog is created! 🎊", {
 					description:
 						"Time to put on your editor hat, Click the post and edit it!",
 				});
