@@ -1,5 +1,6 @@
 import { AnimationContainer, Icons } from "@/components/global";
 import { TextHoverEffect } from "@/components/ui/text-hover-effect";
+import { Github, Linkedin } from "lucide-react";
 import Link from "next/link";
 
 const Footer = () => {
@@ -25,6 +26,20 @@ const Footer = () => {
 								Anayat
 							</Link>
 						</span>
+						<div className="flex items-center gap-2 pt-2">
+							<Link
+								href="https://github.com/anayatkhan1/Writora-AI"
+								target="_blank"
+							>
+								<Github className="size-5 text-muted-foreground hover:text-white" />
+							</Link>
+							<Link
+								href="https://www.linkedin.com/in/anayatkhan"
+								target="_blank"
+							>
+								<Linkedin className="size-5 text-muted-foreground hover:text-white" />
+							</Link>
+						</div>
 					</div>
 				</AnimationContainer>
 
