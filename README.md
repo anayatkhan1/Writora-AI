@@ -7,7 +7,6 @@ Writora AI is a powerful tool that transforms your video or audio content into a
 
 - 🚀 AI-Powered Conversion: Convert audio or video into a blog post within seconds using AI.
 - 🔐 Authentication: Secure user authentication via Clerk
-- 🔐 Authentication with Clerk (Passkeys, Github, and Google Sign-in)
 - 📝 Blog Post Generation: Automatically generate blog posts based on audio or video transcriptions.
 - 💳 Payment Integration: Fully integrated with Stripe for handling payments, custom pricing, and subscription management.
 - 💾 Database Management: Efficient data management with NeonDb.
