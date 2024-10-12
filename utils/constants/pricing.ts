@@ -1,7 +1,7 @@
 export const ORIGIN_URL =
 	process.env.NODE_ENV === "development"
 		? "http://localhost:3000"
-		: process.env.PRODUCTION_ORIGIN_URL;
+		: `${process.env.PRODUCTION_ORIGIN_URL}`;
 
 export const PLANS = [
 	{
