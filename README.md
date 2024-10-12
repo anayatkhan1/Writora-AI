@@ -1,7 +1,7 @@
 # Writora AI
 Writora AI is a powerful tool that transforms your video or audio content into a blog post in seconds, powered by cutting-edge AI technology. It’s designed to streamline your content creation process and generate high-quality blog posts effortlessly.
 
-![writora](https://github.com/user-attachments/assets/75b62791-5fc7-4529-adb8-b0ba5b3ebc80)
+![thumbnails](https://github.com/user-attachments/assets/5b796811-502e-463e-adc0-b2fd494378f1)
 
 ## Features
 
@@ -37,7 +37,7 @@ Writora AI is a powerful tool that transforms your video or audio content into a
 
 ## Feature Requests
 
-To request a feature open a [GitHub issue](https://github.com/anayatkhan1/Writora/issues).
+To request a feature open a [GitHub issue](https://github.com/anayatkhan1/Writora-AI/issues).
 
  ## Contribution Guidelines
 
@@ -100,7 +100,7 @@ OpenAI API
 You can set these environment variables by creating a `.env.local or .env` file in the root directory of the project and adding the variables with their respective values:
 
 ## 📜 License
-This project is licensed under the MIT License. See the [LICENSE](https://github.com/anayatkhan1/Writora/blob/main/LICENSE) file for details.
+This project is licensed under the MIT License. See the [LICENSE](https://github.com/anayatkhan1/Writora-AI/blob/main/LICENSE) file for details.
 
 ---
 
