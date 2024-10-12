@@ -1,7 +1,7 @@
 export const ORIGIN_URL =
 	process.env.NODE_ENV === "development"
 		? "http://localhost:3000"
-		: "https://writora.xyz";
+		: `${process.env.PRODUCTION_ORIGIN_URL}`;
 
 export const PLANS = [
 	{
@@ -34,10 +34,7 @@ export const PLANS = [
 			href: "https://buy.stripe.com/test_eVadT70GKh1ac6Y005",
 			variant: "default",
 		},
-		priceId:
-			process.env.NODE_ENV === "development"
-				? "price_1Q8OdWFDufgW20buAjwmT18A"
-				: "",
+		priceId: process.env.STRIPE_PRICE_ID_BASIC_PLAN,
 	},
 	{
 		id: "pro",
@@ -67,10 +64,7 @@ export const PLANS = [
 			href: "https://buy.stripe.com/test_cN26qF9dg9yI9YQ3ci",
 			variant: "purple",
 		},
-		priceId:
-			process.env.NODE_ENV === "development"
-				? "price_1Q7fz2FDufgW20buM3IOorBS"
-				: "",
+		priceId: process.env.STRIPE_PRICE_ID_PRO_PLAN,
 	},
 	{
 		name: "Business",
