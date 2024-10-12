@@ -73,24 +73,35 @@ Thank you for considering contributing to our AI-powered blog generator project!
 
 To run the project locally, you need to set up the following environment variables:
 
-Clerk Authentication
-- ``NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY``: Publishable key for integrating Clerk authentication.
-- ``CLERK_SECRET_KEY``: Secret key for Clerk authentication.
+```python
+# CLERK
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=
+CLERK_SECRET_KEY=
+NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in
+NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up
+NEXT_PUBLIC_CLERK_SIGN_IN_FORCE_REDIRECT_URL=/dashboard
+NEXT_PUBLIC_CLERK_SIGN_IN_FORCE_REDIRECT_URL=/dashboard
 
-Stripe Payments
-- ``STRIPE_SECRET_KEY``: Secret key for authenticating with Stripe’s API for payment processing.
-- ``STRIPE_WEBHOOK_SECRET``: Webhook secret for verifying that events sent to your endpoint by Stripe are authentic.
+# STRIPE
+STRIPE_SECRET_KEY=
+STRIPE_WEBHOOK_SECRET=
+STRIPE_PRICE_ID_BASIC_PLAN=
+STRIPE_PRICE_ID_PRO_PLAN=
 
-NeonDB Database
-- ``DATABASE_URL``: The connection string for your NeonDB database, used by the application to interact with the database.
+# NEONDB
+DATABASE_URL=
 
-UploadThing
-- ``UPLOADTHING_SECRET``: Secret key for authenticating with UploadThing, used for securely handling file uploads.
-- ``UPLOADTHING_APP_ID``: Application ID for identifying your app with UploadThing services.
+# UPLOADTHING
+UPLOADTHING_SECRET=
+UPLOADTHING_APP_ID=
 
-OpenAI API
-- ``OPENAI_API_KEY``: API key for accessing OpenAI’s models, enabling AI-driven functionalities such as text generation.
+# OPENAI
+OPENAI_API_KEY=
 
+PRODUCTION_ORIGIN_URL=
+NEXT_PUBLIC_APP_NAME=Writora
+
+```
 You can set these environment variables by creating a `.env.local or .env` file in the root directory of the project and adding the variables with their respective values:
 
 ## 📜 License
