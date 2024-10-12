@@ -1,0 +1,38 @@
+[
+	{
+		"title": "How to Maximize Your Productivity with AI Powered Content Generator Tools",
+		"image": "/assets/blog1.jpg",
+		"author_image": "https://example.com/images/author1.jpg",
+		"author_name": "Alex Harmozi",
+		"date_published": "2024-10-05",
+		"description": "Learn how to maximize your productivity with lAI Powered Content generator tools.",
+		"slug": "how-to-maximize-your-productivity"
+	},
+	{
+		"title": "The Ultimate Guide to Organizing Content for Teams",
+		"image": "/assets/blog2.jpg",
+		"author_image": "https://example.com/images/author2.jpg",
+		"author_name": "Jane Smith",
+		"date_published": "2024-09-28",
+		"description": "How to organize Content for teams.",
+		"slug": "the-ultimate-guide-to-organizing-content-for-teams"
+	},
+	{
+		"title": "Why Writora is Essential for Digital Marketers",
+		"image": "/assets/blog3.jpg",
+		"author_image": "https://example.com/images/author3.jpg",
+		"author_name": "Chris Martin",
+		"date_published": "2024-09-20",
+		"description": "Writora management is essential for digital marketers.",
+		"slug": "why-link-writora-is-essential-for-digital-marketers"
+	},
+	{
+		"title": "Top 5 Features Every Content Management Software Should Have",
+		"image": "/assets/blog4.jpg",
+		"author_image": "https://example.com/images/author4.jpg",
+		"author_name": "Emily Clark",
+		"date_published": "2024-09-15",
+		"description": "The features that every content management software should have.",
+		"slug": "top-5-features-every-content-management-software-should-have"
+	}
+]
