@@ -34,5 +34,8 @@ export function getPlanType(priceId: string) {
 	if (priceId === null) return { id: "starter", name: "Starter" };
 
 	const checkPlanType = PLANS.filter((plan) => plan.priceId === priceId);
-	return checkPlanType?.[0];
+
+	if (checkPlanType.length === 0) return { id: "default", name: "Default" };
+
+	return checkPlanType[0];
 }
