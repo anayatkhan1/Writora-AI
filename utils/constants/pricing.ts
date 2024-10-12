@@ -34,10 +34,7 @@ export const PLANS = [
 			href: "https://buy.stripe.com/test_eVadT70GKh1ac6Y005",
 			variant: "default",
 		},
-		priceId:
-			process.env.NODE_ENV === "development"
-				? "price_1Q8OdWFDufgW20buAjwmT18A"
-				: "",
+		priceId: "price_1Q8OdWFDufgW20buAjwmT18A",
 	},
 	{
 		id: "pro",
@@ -67,10 +64,7 @@ export const PLANS = [
 			href: "https://buy.stripe.com/test_cN26qF9dg9yI9YQ3ci",
 			variant: "purple",
 		},
-		priceId:
-			process.env.NODE_ENV === "development"
-				? "price_1Q7fz2FDufgW20buM3IOorBS"
-				: "",
+		priceId: "price_1Q7fz2FDufgW20buM3IOorBS",
 	},
 	{
 		name: "Business",
