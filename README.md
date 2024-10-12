@@ -1,12 +1,13 @@
 # Writora AI
 Writora AI is a powerful tool that transforms your video or audio content into a blog post in seconds, powered by cutting-edge AI technology. It’s designed to streamline your content creation process and generate high-quality blog posts effortlessly.
 
-![thumbnails](https://github.com/user-attachments/assets/5b796811-502e-463e-adc0-b2fd494378f1)
+![writora](https://github.com/user-attachments/assets/75b62791-5fc7-4529-adb8-b0ba5b3ebc80)
 
 ## Features
 
 - 🚀 AI-Powered Conversion: Convert audio or video into a blog post within seconds using AI.
 - 🔐 Authentication: Secure user authentication via Clerk
+- 🔐 Authentication with Clerk (Passkeys, Github, and Google Sign-in)
 - 📝 Blog Post Generation: Automatically generate blog posts based on audio or video transcriptions.
 - 💳 Payment Integration: Fully integrated with Stripe for handling payments, custom pricing, and subscription management.
 - 💾 Database Management: Efficient data management with NeonDb.
@@ -36,7 +37,7 @@ Writora AI is a powerful tool that transforms your video or audio content into a
 
 ## Feature Requests
 
-To request a feature open a [GitHub issue](https://github.com/anayatkhan1/Writora-AI/issues).
+To request a feature open a [GitHub issue](https://github.com/anayatkhan1/Writora/issues).
 
  ## Contribution Guidelines
 
@@ -44,6 +45,10 @@ Thank you for considering contributing to our AI-powered blog generator project!
 
 1. Fork the repository to your GitHub account.
 2. Clone the forked repository to your local machine:
+
+    ```bash
+    git clone https://github.com/your-name/GenieBlog.git
+    ```
 
 3. Create a new branch for your changes:
 
@@ -95,7 +100,7 @@ OpenAI API
 You can set these environment variables by creating a `.env.local or .env` file in the root directory of the project and adding the variables with their respective values:
 
 ## 📜 License
-This project is licensed under the MIT License. See the [LICENSE](https://github.com/anayatkhan1/Writora-AI/blob/main/LICENSE) file for details.
+This project is licensed under the MIT License. See the [LICENSE](https://github.com/anayatkhan1/Writora/blob/main/LICENSE) file for details.
 
 ---
 
