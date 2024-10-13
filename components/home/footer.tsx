@@ -188,7 +188,7 @@ const Footer = () => {
 			<div className="mt-8 w-full border-border/40 border-t pt-4 md:flex md:items-center md:justify-between md:pt-8">
 				<AnimationContainer delay={0.6}>
 					<p className="mt-8 text-muted-foreground text-sm md:mt-0">
-						&copy; {new Date().getFullYear()} Protool INC. All rights reserved.
+						&copy; {new Date().getFullYear()} Writora INC. All rights reserved.
 					</p>
 				</AnimationContainer>
 			</div>
