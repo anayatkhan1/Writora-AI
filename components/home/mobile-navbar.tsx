@@ -60,7 +60,7 @@ const MobileNavbar = () => {
 							) : (
 								<>
 									<Link
-										href="/auth/sign-in"
+										href="/sign-in"
 										className={buttonVariants({
 											variant: "outline",
 											className: "w-full",
@@ -69,7 +69,7 @@ const MobileNavbar = () => {
 										Sign In
 									</Link>
 									<Link
-										href="/auth/sign-up"
+										href="/sign-in"
 										className={buttonVariants({ className: "w-full" })}
 									>
 										Sign Up
