@@ -6,6 +6,14 @@ import OpenAI from "openai";
 
 const openai = new OpenAI({
 	apiKey: process.env.OPENAI_API_KEY,
+	timeout: 300000, // 5 minutes timeout
+	maxRetries: 5, // Increase retries for better reliability
+	defaultHeaders: {
+		"Keep-Alive": "timeout=300", // Keep connection alive for 5 minutes
+	},
+	defaultQuery: {
+		"request-timeout": "300000", // Request timeout hint for the API
+	},
 });
 
 export async function transcribeUploadedFile(
@@ -36,15 +44,82 @@ export async function transcribeUploadedFile(
 		};
 	}
 
-	const response = await fetch(fileUrl);
-
 	try {
-		const transcriptions = await openai.audio.transcriptions.create({
-			model: "whisper-1",
-			file: response,
-		});
+		// Fetch with timeout and retry logic
+		const controller = new AbortController();
+		const timeoutId = setTimeout(() => controller.abort(), 120000); // Increase to 120 second timeout for fetch
 
-		console.log({ transcriptions });
+		// Add retry logic for fetch
+		const fetchWithRetry = async (
+			url: string,
+			options: RequestInit,
+			maxRetries = 3,
+		) => {
+			let lastError;
+			for (let i = 0; i < maxRetries; i++) {
+				try {
+					return await fetch(url, options);
+				} catch (error) {
+					console.log(`Fetch attempt ${i + 1} failed, retrying...`);
+					lastError = error;
+					// Exponential backoff
+					await new Promise((r) => setTimeout(r, Math.pow(2, i) * 1000));
+				}
+			}
+			throw lastError;
+		};
+
+		const response = await fetchWithRetry(fileUrl, {
+			signal: controller.signal,
+			headers: {
+				Connection: "keep-alive",
+				"Keep-Alive": "timeout=120",
+			},
+		}).finally(() => clearTimeout(timeoutId));
+
+		if (!response.ok) {
+			throw new Error(
+				`Failed to fetch file: ${response.status} ${response.statusText}`,
+			);
+		}
+
+		// Process in chunks to avoid timeouts
+		console.log("Starting transcription for file:", fileName);
+		const startTime = Date.now();
+
+		// Add retry logic for OpenAI API calls
+		const callWithRetry = async (fn: any, maxRetries = 3) => {
+			let lastError;
+			for (let i = 0; i < maxRetries; i++) {
+				try {
+					return await fn();
+				} catch (error) {
+					console.log(`API call attempt ${i + 1} failed, retrying...`, error);
+					lastError = error;
+					// Exponential backoff
+					await new Promise((r) => setTimeout(r, Math.pow(2, i) * 1000));
+				}
+			}
+			throw lastError;
+		};
+
+		// Convert the response to a Blob which is compatible with OpenAI's API
+		const audioBlob = await response.blob();
+		// Create a File object from the Blob with the original filename
+		const audioFile = new File([audioBlob], fileName, { type: audioBlob.type });
+
+		const transcriptions = await callWithRetry(() =>
+			openai.audio.transcriptions.create({
+				model: "whisper-1",
+				file: audioFile,
+				// Add response_format parameter for more reliable processing
+				response_format: "json",
+			}),
+		);
+
+		const duration = ((Date.now() - startTime) / 1000).toFixed(2);
+		console.log(`Transcription completed in ${duration}s`);
+
 		return {
 			success: true,
 			message: "File uploaded successfully!",
@@ -53,10 +128,32 @@ export async function transcribeUploadedFile(
 	} catch (error) {
 		console.error("Error processing file", error);
 
-		if (error instanceof OpenAI.APIError && error.status === 413) {
+		// Handle specific error types
+		if (error instanceof OpenAI.APIError) {
+			if (error.status === 413) {
+				return {
+					success: false,
+					message: "File size exceeds the max limit of 20MB",
+					data: null,
+				};
+			}
+
+			if (error.status === 504 || error.status === 408) {
+				return {
+					success: false,
+					message:
+						"The request timed out. Try with a shorter audio file or try again later.",
+					data: null,
+				};
+			}
+		}
+
+		// Handle fetch timeout
+		if (error instanceof Error && error.name === "AbortError") {
 			return {
 				success: false,
-				message: "File size exceeds the max limit of 20MB",
+				message:
+					"Request timed out while fetching the file. Please try again with a smaller file.",
 				data: null,
 			};
 		}
@@ -107,16 +204,38 @@ async function generateBlogPost({
 	transcriptions: string;
 	userPosts: string;
 }) {
-	const completion = await openai.chat.completions.create({
-		messages: [
+	// Add retry logic for OpenAI API calls
+	const callWithRetry = async (fn: any, maxRetries = 3) => {
+		let lastError;
+		for (let i = 0; i < maxRetries; i++) {
+			try {
+				return await fn();
+			} catch (error) {
+				console.log(
+					`Blog generation attempt ${i + 1} failed, retrying...`,
+					error,
+				);
+				lastError = error;
+				// Exponential backoff
+				await new Promise((r) => setTimeout(r, Math.pow(2, i) * 1000));
+			}
+		}
+		throw lastError;
+	};
+
+	// Stream the response to avoid timeouts
+	const completion = await callWithRetry(() =>
+		openai.chat.completions.create(
 			{
-				role: "system",
-				content:
-					"You are a skilled content writer that converts audio transcriptions into well-structured, engaging blog posts in Markdown format. Create a comprehensive blog post with a catchy title, introduction, main body with multiple sections, and a conclusion. Analyze the user's writing style from their previous posts and emulate their tone and style in the new post. Keep the tone casual and professional.",
-			},
-			{
-				role: "user",
-				content: `Here are some of my previous blog posts for reference:
+				messages: [
+					{
+						role: "system",
+						content:
+							"You are a skilled content writer that converts audio transcriptions into well-structured, engaging blog posts in Markdown format. Create a comprehensive blog post with a catchy title, introduction, main body with multiple sections, and a conclusion. Analyze the user's writing style from their previous posts and emulate their tone and style in the new post. Keep the tone casual and professional.",
+					},
+					{
+						role: "user",
+						content: `Here are some of my previous blog posts for reference:
 
 ${userPosts}
 
@@ -133,12 +252,19 @@ Please convert the following transcription into a well-structured blog post usin
 9. Emulate my writing style, tone, and any recurring patterns you notice from my previous posts.
 
 Here's the transcription to convert: ${transcriptions}`,
+					},
+				],
+				model: "gpt-4o-mini",
+				temperature: 0.7,
+				max_tokens: 1000,
+				// Set stream to false to get the complete response at once
+				stream: false,
 			},
-		],
-		model: "gpt-4o-mini",
-		temperature: 0.7,
-		max_tokens: 1000,
-	});
+			{
+				timeout: 180000, // 3 minutes timeout specifically for this call
+			},
+		),
+	);
 
 	return completion.choices[0].message.content;
 }

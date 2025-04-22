@@ -52,9 +52,11 @@ export default function UploadForm({ planTypeName }: { planTypeName: string }) {
 					validatedFields.error.flatten().fieldErrors.file?.[0] ??
 					"Invalid file",
 			});
+			return;
 		}
 
 		if (file) {
+			// Upload the file
 			const resp: any = await startUpload([file]);
 			console.log({ resp });
 
@@ -62,36 +64,75 @@ export default function UploadForm({ planTypeName }: { planTypeName: string }) {
 				toast.error("Something went wrong", {
 					description: "Please use a different file",
 				});
+				return;
 			}
-			toast.info("Transcription is in progress...", {
+
+			// Show a loading toast that stays visible during the potentially long transcription process
+			const toastId = toast.loading("Transcription is in progress...", {
 				description:
-					"Hang tight! Our digital wizards are sprinkling magic dust on your file! ✨",
+					"Hang tight! Our digital wizards are sprinkling magic dust on your file! ✨ This may take a few minutes for longer files.",
+				duration: 120000, // 2 minutes
 			});
 
-			const result = await transcribeUploadedFile(resp);
-			const { data = null, message = null } = result || {};
+			// Try to transcribe with better error handling
+			let result;
+			try {
+				result = await transcribeUploadedFile(resp);
+				// Dismiss the loading toast
+				toast.dismiss(toastId);
+			} catch (error) {
+				// Dismiss the loading toast
+				toast.dismiss(toastId);
 
+				console.error("Error during transcription:", error);
+				toast.error("Transcription process failed", {
+					description:
+						"The request may have timed out. Try with a shorter audio file or try again later.",
+				});
+				return;
+			}
+
+			const { data = null, message = null, success = false } = result || {};
+
+			// Handle transcription failures
 			if (!result || (!data && !message)) {
 				toast.error("An unexpected error occurred", {
 					description:
 						"An error occurred during transcription. Please try again.",
 				});
+				return;
 			}
 
+			if (!success) {
+				toast.error("Transcription failed", {
+					description: message || "Please try again with a different file.",
+				});
+				return;
+			}
+
+			// If we have data, proceed with blog post generation
 			if (data) {
 				toast.message("Generating AI blog post...", {
 					description: "Please wait while we generate your blog post.",
 				});
 
-				await generateBlogPostAction({
-					transcriptions: data.transcriptions,
-					userId: data.userId,
-				});
+				try {
+					await generateBlogPostAction({
+						transcriptions: data.transcriptions,
+						userId: data.userId,
+					});
 
-				toast.message("🎉 Woohoo! Your AI blog is created! 🎊", {
-					description:
-						"Time to put on your editor hat, Click the post and edit it!",
-				});
+					toast.message("🎉 Woohoo! Your AI blog is created! 🎊", {
+						description:
+							"Time to put on your editor hat, Click the post and edit it!",
+					});
+				} catch (error) {
+					console.error("Error generating blog post:", error);
+					toast.error("Failed to generate blog post", {
+						description:
+							"There was an error generating your blog post. Please try again.",
+					});
+				}
 			}
 		}
 	};
