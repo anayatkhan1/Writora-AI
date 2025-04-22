@@ -1,0 +1,45 @@
+{
+	"version": 2,
+	"builds": [
+		{
+			"src": "package.json",
+			"use": "@vercel/next"
+		}
+	],
+	"routes": [
+		{
+			"src": "/(.*)",
+			"dest": "/$1"
+		}
+	],
+	"functions": {
+		"api/*": {
+			"memory": 1024,
+			"maxDuration": 300
+		},
+		"app/*": {
+			"memory": 1024,
+			"maxDuration": 300
+		}
+	},
+	"headers": [
+		{
+			"source": "/(.*)",
+			"headers": [
+				{
+					"key": "Cache-Control",
+					"value": "public, max-age=0, must-revalidate"
+				}
+			]
+		},
+		{
+			"source": "/api/(.*)",
+			"headers": [
+				{
+					"key": "Cache-Control",
+					"value": "no-cache, no-store, must-revalidate"
+				}
+			]
+		}
+	]
+}
