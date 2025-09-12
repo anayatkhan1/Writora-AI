@@ -11,6 +11,10 @@ import {
 import { currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 
+// Ensure server actions on this route have sufficient time on Vercel
+export const runtime = "nodejs";
+export const maxDuration = 60; // Allow up to 60s (Vercel Pro)
+
 export default async function Dashboard() {
 	const clerkUser = await currentUser();
 
