@@ -44,6 +44,7 @@ export default function RootLayout({
 			<html lang="en">
 				<head>
 					<link rel="icon" href="/favicon.ico" sizes="any" />
+					<script src="https://px.midbound.ai/cmh3itrqj000ds601qyxygejr" async></script>
 				</head>
 				<body
 					className={cn(
